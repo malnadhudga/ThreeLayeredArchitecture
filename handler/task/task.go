@@ -2,18 +2,25 @@ package taskhandler
 
 import (
 	"ThreeLayeredArchitecture/models/task"
-	"ThreeLayeredArchitecture/services/task"
 	"encoding/json"
 	"io"
 	"net/http"
 	"strconv"
 )
 
+//type Taskservice interface {
+//	GetPendingTasks() ([]models.Task, error)
+//	AddTask(desc string) (models.Task, error)
+//	DeleteTask(id int) error
+//	CompleteTask(id int) (string, error)
+//	GetTaskByID(id int) (models.Task, error)
+//}
+
 type TaskHandler struct {
-	Service *taskservice.TaskService
+	Service Taskservice
 }
 
-func NewTaskHandler(service *taskservice.TaskService) *TaskHandler {
+func NewTaskHandler(service Taskservice) *TaskHandler {
 	return &TaskHandler{Service: service}
 }
 

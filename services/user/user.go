@@ -1,26 +1,30 @@
 package user
 
 import (
-	"ThreeLayeredArchitecture/models/user"
-	"ThreeLayeredArchitecture/store/user"
+	userModel "ThreeLayeredArchitecture/models/user"
 )
 
+type UserStore interface {
+	CreateUser(userModel.User) (userModel.User, error)
+	GetAllUsers() ([]userModel.User, error)
+	GetUserByID(int) (userModel.User, error)
+}
 type UserService struct {
-	Store *user.UserStore
+	Store UserStore
 }
 
-func NewUserService(store *user.UserStore) *UserService {
+func NewUserService(store UserStore) *UserService {
 	return &UserService{Store: store}
 }
 
-func (s *UserService) CreateUser(user models.User) (models.User, error) {
+func (s *UserService) CreateUser(user userModel.User) (userModel.User, error) {
 	return s.Store.CreateUser(user)
 }
 
-func (s *UserService) GetAllUsers() ([]models.User, error) {
+func (s *UserService) GetAllUsers() ([]userModel.User, error) {
 	return s.Store.GetAllUsers()
 }
 
-func (s *UserService) GetUserByID(id int) (models.User, error) {
+func (s *UserService) GetUserByID(id int) (userModel.User, error) {
 	return s.Store.GetUserByID(id)
 }

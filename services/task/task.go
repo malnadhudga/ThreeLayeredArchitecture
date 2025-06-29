@@ -2,30 +2,37 @@ package taskservice
 
 import (
 	"ThreeLayeredArchitecture/models/task"
-	"ThreeLayeredArchitecture/store/task"
 )
 
-type TaskService struct {
-	Store *taskstore.TaskStore
+type TaskStore interface {
+	Add(desc string) (models.Task, error)
+	GetPending() ([]models.Task, error)
+	GetByID(id int) (models.Task, error)
+	Delete(id int) error
+	MarkComplete(id int) error
 }
 
-func NewTaskService(store *taskstore.TaskStore) *TaskService {
+type TaskService struct {
+	Store TaskStore
+}
+
+func NewTaskService(store TaskStore) *TaskService {
 	return &TaskService{Store: store}
 }
 
-func (s *TaskService) AddTask(desc string) (models.Task, error) {
+func (s *TaskService) Add(desc string) (models.Task, error) {
 	return s.Store.Add(desc)
 }
 
-func (s *TaskService) GetPendingTasks() ([]models.Task, error) {
+func (s *TaskService) GetPending() ([]models.Task, error) {
 	return s.Store.GetPending()
 }
 
-func (s *TaskService) GetTaskByID(id int) (models.Task, error) {
+func (s *TaskService) GetByID(id int) (models.Task, error) {
 	return s.Store.GetByID(id)
 }
 
-func (s *TaskService) CompleteTask(id int) (string, error) {
+func (s *TaskService) MarkComplete(id int) (string, error) {
 	task, err := s.Store.GetByID(id)
 	if err != nil {
 		return "", err
@@ -41,6 +48,6 @@ func (s *TaskService) CompleteTask(id int) (string, error) {
 	return "Task marked as complete", nil
 }
 
-func (s *TaskService) DeleteTask(id int) error {
+func (s *TaskService) Delete(id int) error {
 	return s.Store.Delete(id)
 }

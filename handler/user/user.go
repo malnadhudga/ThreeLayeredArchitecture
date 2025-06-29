@@ -7,14 +7,13 @@ import (
 	"strconv"
 
 	"ThreeLayeredArchitecture/models/user"
-	"ThreeLayeredArchitecture/services/user"
 )
 
 type UserHandler struct {
-	Service *user.UserService
+	Service UserService
 }
 
-func NewUserHandler(service *user.UserService) *UserHandler {
+func NewUserHandler(service UserService) *UserHandler {
 	return &UserHandler{Service: service}
 }
 
@@ -69,7 +68,7 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) GetUserbyID(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {

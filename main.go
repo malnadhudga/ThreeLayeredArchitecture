@@ -56,7 +56,7 @@ func main() {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		}
 	})
-	http.HandleFunc("/user/{id}", userHandler.GetUserByID)
+	http.HandleFunc("/user/{id}", userHandler.GetUserbyID)
 
 	fmt.Println("Server on :8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
