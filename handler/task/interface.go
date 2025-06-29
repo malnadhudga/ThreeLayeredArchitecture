@@ -3,9 +3,9 @@ package taskhandler
 import models "ThreeLayeredArchitecture/models/task"
 
 type Taskservice interface {
-	GetPendingTasks() ([]models.Task, error)
-	AddTask(desc string) (models.Task, error)
-	DeleteTask(id int) error
-	CompleteTask(id int) (string, error)
-	GetTaskByID(id int) (models.Task, error)
+	GetPending() ([]models.Task, error)
+	Add(desc string) (models.Task, error)
+	Delete(id int) error
+	MarkComplete(id int) (string, error)
+	GetByID(id int) (models.Task, error)
 }

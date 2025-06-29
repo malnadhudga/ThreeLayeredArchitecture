@@ -3,6 +3,7 @@ package taskstore
 import (
 	"ThreeLayeredArchitecture/models/task"
 	"database/sql"
+	"log"
 )
 
 type TaskStore struct {
@@ -31,7 +32,11 @@ func (ts *TaskStore) GetPending() ([]models.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("Error closing Task DB: %v", err)
+		}
+	}()
 
 	var tasks []models.Task
 	for rows.Next() {

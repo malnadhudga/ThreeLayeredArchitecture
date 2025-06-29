@@ -27,7 +27,7 @@ func NewTaskHandler(service Taskservice) *TaskHandler {
 func (h *TaskHandler) HandleTasks(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		task, err := h.Service.GetPendingTasks()
+		task, err := h.Service.GetPending()
 		if err != nil {
 			http.Error(w, "Error fetching tasks", http.StatusInternalServerError)
 			return
@@ -57,7 +57,7 @@ func (h *TaskHandler) HandleTasks(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
 			return
 		}
-		task, err := h.Service.AddTask(input.Description)
+		task, err := h.Service.Add(input.Description)
 		if err != nil {
 			http.Error(w, "Failed to add", http.StatusInternalServerError)
 			return
@@ -77,7 +77,7 @@ func (h *TaskHandler) HandleTasks(w http.ResponseWriter, r *http.Request) {
 
 	case "DELETE":
 		id, _ := strconv.Atoi(r.URL.Query().Get("id"))
-		err := h.Service.DeleteTask(id)
+		err := h.Service.Delete(id)
 		if err != nil {
 			http.Error(w, "Delete failed", http.StatusNotFound)
 			return
@@ -90,7 +90,7 @@ func (h *TaskHandler) HandleTasks(w http.ResponseWriter, r *http.Request) {
 
 	case "PATCH":
 		id, _ := strconv.Atoi(r.URL.Query().Get("id"))
-		msg, err := h.Service.CompleteTask(id)
+		msg, err := h.Service.MarkComplete(id)
 		if err != nil {
 			http.Error(w, "Update failed", http.StatusInternalServerError)
 			return
@@ -117,7 +117,7 @@ func (h *TaskHandler) HandleTaskByID(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		task, err := h.Service.GetTaskByID(id)
+		task, err := h.Service.GetByID(id)
 		if err != nil {
 			http.Error(w, "Not found", http.StatusNotFound)
 			return

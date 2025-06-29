@@ -3,6 +3,7 @@ package user
 import (
 	"ThreeLayeredArchitecture/models/user"
 	"database/sql"
+	"log"
 )
 
 type UserStore struct {
@@ -29,12 +30,19 @@ func (s *UserStore) GetAllUsers() ([]models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		if err := rows.Close(); err != nil {
+			log.Printf("Error closing Task DB: %v", err)
+		}
+	}()
 
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		rows.Scan(&user.ID, &user.Name)
+		err = rows.Scan(&user.ID, &user.Name)
+		if err != nil {
+			return nil, err
+		}
 		users = append(users, user)
 	}
 	return users, nil

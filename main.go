@@ -24,7 +24,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Task DB connection failed:", err)
 	}
-	defer taskDB.Close()
+	defer func() {
+		if err := taskDB.Close(); err != nil {
+			log.Printf("Error closing Task DB: %v", err)
+		}
+	}()
 
 	taskStore := taskstore.NewTaskStore(taskDB)
 	taskService := taskservice.NewTaskService(taskStore)
@@ -35,7 +39,11 @@ func main() {
 	if err != nil {
 		log.Fatal("User DB connection failed:", err)
 	}
-	defer userDB.Close()
+	defer func() {
+		if err := userDB.Close(); err != nil {
+			log.Printf("Error closing User DB: %v", err)
+		}
+	}()
 
 	userStore := userstore.NewUserStore(userDB)
 	userService := userservice.NewUserService(userStore)
