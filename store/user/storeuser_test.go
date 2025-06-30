@@ -10,16 +10,19 @@ import (
 
 func TestCreateUser(t *testing.T) {
 	testcases := []struct {
-		name       string
-		expectedID int64
+		inputUser    models.User
+		expectedUser models.User
+		expectErr    error
 	}{
 		{
-			name:       "Alice",
-			expectedID: 1,
+			inputUser:    models.User{Name: "alan"},
+			expectedUser: models.User{ID: 1, Name: "alan"},
+			expectErr:    nil,
 		},
 		{
-			name:       "Bob",
-			expectedID: 2,
+			inputUser:    models.User{Name: "ram"},
+			expectedUser: models.User{ID: 2, Name: "ram"},
+			expectErr:    nil,
 		},
 	}
 
@@ -28,19 +31,22 @@ func TestCreateUser(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error: %s", err)
 		}
+		defer db.Close()
+
 		store := userstore.NewUserStore(db)
 
 		mock.ExpectExec("INSERT INTO user (name) VALUES (?)").
-			WithArgs(tc.name).
-			WillReturnResult(sqlmock.NewResult(tc.expectedID, 1))
+			WithArgs(tc.inputUser.Name).
+			WillReturnResult(sqlmock.NewResult(int64(tc.expectedUser.ID), 1))
 
-		u, err := store.CreateUser(models.User{Name: tc.name})
+		u, err := store.CreateUser(tc.inputUser)
 
-		if err != nil {
+		if err != tc.expectErr {
 			t.Errorf("expected no error, got %v", err)
 		}
-		if int64(u.ID) != tc.expectedID || u.Name != tc.name {
-			t.Errorf("unexpected user: %+v", u)
+
+		if u.ID != tc.expectedUser.ID || u.Name != tc.expectedUser.Name {
+			t.Errorf("unexpected user: got %+v, expected %+v", u, tc.expectedUser)
 		} else {
 			t.Log("PASS")
 		}
@@ -48,42 +54,17 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestGetAllUsers(t *testing.T) {
-	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
-	if err != nil {
-		t.Fatalf("unexpected error: %s", err)
-	}
-	store := userstore.NewUserStore(db)
-
-	rows := sqlmock.NewRows([]string{"id", "name"}).
-		AddRow(1, "Alice").
-		AddRow(2, "Bob")
-
-	mock.ExpectQuery("SELECT id, name FROM user").
-		WillReturnRows(rows)
-
-	users, err := store.GetAllUsers()
-	if err != nil {
-		t.Errorf("unexpected error: %v", err)
-	}
-	if len(users) != 2 {
-		t.Errorf("expected 2 users, got %d", len(users))
-	}
-	if users[0].Name != "Alice" || users[1].Name != "Bob" {
-		t.Errorf("unexpected users: %+v", users)
-	}
-}
-
-func TestGetUserByID(t *testing.T) {
 	testcases := []struct {
-		id   int
-		name string
+		expectedUser models.User
+		expectErr    error
 	}{
 		{
-			id:   1,
-			name: "Bhim",
+			expectedUser: models.User{ID: 1, Name: "alan"},
+			expectErr:    nil,
 		},
-		{id: 2,
-			name: "Ram",
+		{
+			expectedUser: models.User{ID: 2, Name: "ram"},
+			expectErr:    nil,
 		},
 	}
 
@@ -92,21 +73,85 @@ func TestGetUserByID(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error: %s", err)
 		}
+		defer db.Close()
+
 		store := userstore.NewUserStore(db)
 
 		rows := sqlmock.NewRows([]string{"id", "name"}).
-			AddRow(tc.id, tc.name)
+			AddRow(tc.expectedUser.ID, tc.expectedUser.Name)
 
-		mock.ExpectQuery("SELECT id, name FROM user WHERE id = ?").
-			WithArgs(tc.id).
+		mock.ExpectQuery("SELECT id, name FROM user").
 			WillReturnRows(rows)
 
-		u, err := store.GetUserByID(tc.id)
-		if err != nil {
-			t.Errorf("unexpected error: %v", err)
+		users, err := store.GetAllUsers()
+
+		if err != tc.expectErr {
+			t.Errorf("expected error: %v, got: %v", tc.expectErr, err)
+			continue
 		}
-		if u.ID != tc.id || u.Name != tc.name {
-			t.Errorf("unexpected user: %+v", u)
+		if len(users) != 1 {
+			t.Fatalf("expected 1 user, got %d", len(users))
 		}
+
+		user := users[0]
+		if user.ID != tc.expectedUser.ID || user.Name != tc.expectedUser.Name {
+			t.Errorf("unexpected user: got %+v, expected %+v", user, tc.expectedUser)
+		} else {
+			t.Log("PASS")
+		}
+	}
+}
+
+func TestGetUserByID(t *testing.T) {
+	testcases := []struct {
+		name         string
+		inputID      int
+		expectedUser models.User
+		expectErr    error
+	}{
+		{
+			name:         "valid user Bhim",
+			inputID:      1,
+			expectedUser: models.User{ID: 1, Name: "Bhim"},
+			expectErr:    nil,
+		},
+		{
+			name:         "valid user Ram",
+			inputID:      2,
+			expectedUser: models.User{ID: 2, Name: "Ram"},
+			expectErr:    nil,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+			defer db.Close()
+
+			store := userstore.NewUserStore(db)
+
+			rows := sqlmock.NewRows([]string{"id", "name"}).
+				AddRow(tc.expectedUser.ID, tc.expectedUser.Name)
+
+			mock.ExpectQuery("SELECT id, name FROM user WHERE id = ?").
+				WithArgs(tc.inputID).
+				WillReturnRows(rows)
+
+			u, err := store.GetUserByID(tc.inputID)
+
+			if (err != nil) != (tc.expectErr != nil) {
+				t.Errorf("expected error: %v, got: %v", tc.expectErr, err)
+				return
+			}
+
+			if u.ID != tc.expectedUser.ID || u.Name != tc.expectedUser.Name {
+				t.Errorf("unexpected user: got %+v, expected %+v", u, tc.expectedUser)
+			} else {
+				t.Log("PASS")
+			}
+		})
 	}
 }
