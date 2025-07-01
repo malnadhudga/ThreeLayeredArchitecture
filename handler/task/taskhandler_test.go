@@ -242,6 +242,14 @@ func TestTaskHandler_HandleTaskByID(t *testing.T) {
 			mockErr:    errors.New("not found"),
 			expectCode: http.StatusNotFound,
 		},
+		{
+			id:         3,
+			desc:       "Task not found",
+			pathID:     "3e",
+			expected:   models.Task{},
+			mockErr:    errors.New("not found"),
+			expectCode: http.StatusBadRequest,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -249,9 +257,10 @@ func TestTaskHandler_HandleTaskByID(t *testing.T) {
 		req.SetPathValue("id", tc.pathID)
 		w := httptest.NewRecorder()
 
-		id, _ := strconv.Atoi(tc.pathID)
-		mockService.EXPECT().GetByID(id).Return(tc.expected, tc.mockErr)
-
+		id, err := strconv.Atoi(tc.pathID)
+		if err == nil {
+			mockService.EXPECT().GetByID(id).Return(tc.expected, tc.mockErr)
+		}
 		handler.HandleTaskByID(w, req)
 
 		resp := w.Result()
