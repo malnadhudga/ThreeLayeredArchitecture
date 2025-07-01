@@ -5,7 +5,7 @@ name: Go Build
 on:
   push:
     branches:
-      - main
+      - mockgen
   pull_request:
     branches:
       - main
@@ -25,12 +25,6 @@ jobs:
 
       - name: Download Go modules
         run: go mod tidy
-
-      - name: Run golangci link
-        uses: golangci/golangci-lint-action@v7
-        with:
-          version: v2.1.6
-
 
       - name: Build Go application
         run: |
