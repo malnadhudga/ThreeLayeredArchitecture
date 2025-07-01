@@ -1,16 +1,8 @@
-package taskservice
+package task
 
 import (
 	"ThreeLayeredArchitecture/models/task"
 )
-
-type TaskStore interface {
-	Add(desc string) (models.Task, error)
-	GetPending() ([]models.Task, error)
-	GetByID(id int) (models.Task, error)
-	Delete(id int) error
-	MarkComplete(id int) error
-}
 
 type TaskService struct {
 	Store TaskStore
@@ -37,6 +29,7 @@ func (s *TaskService) MarkComplete(id int) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	if task.Completed {
 		return "Task already completed", nil
 	}
@@ -45,6 +38,7 @@ func (s *TaskService) MarkComplete(id int) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return "Task marked as complete", nil
 }
 

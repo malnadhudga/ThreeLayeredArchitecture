@@ -2,10 +2,10 @@ package task
 
 import models "ThreeLayeredArchitecture/models/task"
 
-type Taskservice interface {
-	GetPending() ([]models.Task, error)
+type TaskStore interface {
 	Add(desc string) (models.Task, error)
-	Delete(id int) error
-	MarkComplete(id int) (string, error)
+	GetPending() ([]models.Task, error)
 	GetByID(id int) (models.Task, error)
+	Delete(id int) error
+	MarkComplete(id int) error
 }

@@ -1,84 +1,135 @@
 package user
 
 import (
-	models "ThreeLayeredArchitecture/models/user"
+	model "ThreeLayeredArchitecture/models/user"
 	"errors"
+	"go.uber.org/mock/gomock"
 	"testing"
 )
 
-type MockUser struct{}
+func TestUserService_CreateUser(t *testing.T) {
+	ctrl := gomock.NewController(t)
 
-func (m *MockUser) GetUserByID(id int) (models.User, error) {
-	if id == 1 {
-		user1 := models.User{ID: 1, Name: "Ram"}
-		return user1, nil
-	} else {
+	mockStore := NewMockUserStore(ctrl)
+	service := NewUserService(mockStore)
 
-		return models.User{}, errors.New("User not found")
-	}
-}
-
-func (m *MockUser) GetAllUsers() ([]models.User, error) {
-	alluser := []models.User{
+	testCases := []struct {
+		id       int
+		desc     string
+		input    model.User
+		expected model.User
+		mockErr  error
+	}{
 		{
-			ID:   1,
-			Name: "ram",
+			id:       1,
+			desc:     "Success creating user",
+			input:    model.User{ID: 1, Name: "Ram"},
+			expected: model.User{ID: 1, Name: "Ram"},
+			mockErr:  nil,
 		},
 		{
-			ID:   2,
-			Name: "raj",
+			id:       2,
+			desc:     "Failure creating user",
+			input:    model.User{ID: 2, Name: "bhim"},
+			expected: model.User{},
+			mockErr:  errors.New("unable to create user"),
 		},
 	}
 
-	return alluser, nil
+	for _, tc := range testCases {
+		mockStore.EXPECT().CreateUser(tc.input).Return(tc.expected, tc.mockErr)
+		result, err := service.CreateUser(tc.input)
+
+		if (err == nil && tc.mockErr != nil) || (err != nil && tc.mockErr == nil) {
+			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.mockErr, err)
+		}
+
+		if result.ID != tc.expected.ID || result.Name != tc.expected.Name {
+			t.Errorf("[Test ID %d] %s: expected user %+v, got %+v", tc.id, tc.desc, tc.expected, result)
+		}
+	}
 }
 
-func (m *MockUser) CreateUser(user models.User) (models.User, error) {
-	return models.User{}, nil
-}
+func TestUserService_GetAllUsers(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockStore := NewMockUserStore(ctrl)
+	service := NewUserService(mockStore)
 
-func TestCreateUser(t *testing.T) {
-	mock := &MockUser{}
-	service := NewUserService(mock)
+	expectedUsers := []model.User{
+		{ID: 1, Name: "Ram"},
+		{ID: 2, Name: "Bhim"},
+	}
 
-	newUser := models.User{Name: "Alice"}
-	_, err := service.CreateUser(newUser)
+	mockStore.EXPECT().GetAllUsers().Return(expectedUsers, nil)
+	users, err := service.GetAllUsers()
 
 	if err != nil {
-		t.Error("Expected no error, got:", err)
+		t.Errorf("[Success case] unexpected error: %v", err)
+	}
+
+	if len(users) != len(expectedUsers) {
+		t.Errorf("[Success case] expected %d users, got %d", len(expectedUsers), len(users))
 	} else {
-		t.Log("Successfully created user")
+		for i := range users {
+			if users[i].ID != expectedUsers[i].ID || users[i].Name != expectedUsers[i].Name {
+				t.Errorf("[Success case] expected user %+v, got %+v", expectedUsers[i], users[i])
+			}
+		}
+	}
+
+	mockErr := errors.New("database error")
+	mockStore.EXPECT().GetAllUsers().Return(nil, mockErr)
+
+	usersFail, errFail := service.GetAllUsers()
+	if errFail == nil || errFail.Error() != mockErr.Error() {
+		t.Errorf("[Failure case] expected error %v, got %v", mockErr, errFail)
+	}
+
+	if usersFail != nil {
+		t.Errorf("[Failure case] expected nil users, got %v", usersFail)
 	}
 }
 
-func TestGetUserByID(t *testing.T) {
-	mock := &MockUser{}
-	service := NewUserService(mock)
+func TestUserService_GetUserByID(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-	msg1, err := service.GetUserByID(1)
-	if err != nil {
-		t.Error(err)
-	} else {
-		t.Logf("Successfully get user by id: %d and name %s", msg1.ID, msg1.Name)
+	mockStore := NewMockUserStore(ctrl)
+	service := NewUserService(mockStore)
+
+	testCases := []struct {
+		id       int
+		desc     string
+		inputID  int
+		expected model.User
+		mockErr  error
+	}{
+		{
+			id:       1,
+			desc:     "User found",
+			inputID:  1,
+			expected: model.User{ID: 1, Name: "Ram"},
+			mockErr:  nil,
+		},
+		{
+			id:       2,
+			desc:     "User not found",
+			inputID:  99,
+			expected: model.User{},
+			mockErr:  errors.New("user not found"),
+		},
 	}
 
-	_, err = mock.GetUserByID(2)
-	if err == nil {
-		t.Error(err)
-	} else {
-		t.Logf("PASS")
+	for _, tc := range testCases {
+		mockStore.EXPECT().GetUserByID(tc.inputID).Return(tc.expected, tc.mockErr)
+		result, err := service.GetUserByID(tc.inputID)
+
+		if (err == nil && tc.mockErr != nil) || (err != nil && tc.mockErr == nil) || (err != nil && tc.mockErr != nil && err.Error() != tc.mockErr.Error()) {
+			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.mockErr, err)
+		}
+
+		if result.ID != tc.expected.ID || result.Name != tc.expected.Name {
+			t.Errorf("[Test ID %d] %s: expected user %+v, got %+v", tc.id, tc.desc, tc.expected, result)
+		}
 	}
-}
-
-func TestGetUsers(t *testing.T) {
-	mock := &MockUser{}
-	service := NewUserService(mock)
-
-	_, err := service.GetAllUsers()
-	if err != nil {
-		t.Error(err)
-	} else {
-		t.Log("Successfully created user")
-	}
-
 }

@@ -5,6 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	_ "ThreeLayeredArchitecture/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
+
 	// Task
 	"ThreeLayeredArchitecture/datasource/task"
 	taskhandler "ThreeLayeredArchitecture/handler/task"
@@ -18,47 +21,42 @@ import (
 	userstore "ThreeLayeredArchitecture/store/user"
 )
 
+// @title           Task/User API
+// @version         1.0
+// @description     This is a sample server for managing tasks and users.
+// @host            localhost:8000
+// @BasePath        /
 func main() {
-	// --- TASK DB ---
+	// Task DB init...
 	taskDB, err := task.InitDB()
 	if err != nil {
 		log.Fatal("Task DB connection failed:", err)
 	}
-	defer func() {
-		if err := taskDB.Close(); err != nil {
-			log.Printf("Error closing Task DB: %v", err)
-		}
-	}()
+	defer taskDB.Close()
 
 	taskStore := taskstore.NewTaskStore(taskDB)
 	taskService := taskservice.NewTaskService(taskStore)
 	taskHandler := taskhandler.NewTaskHandler(taskService)
 
-	// --- USER DB ---
+	// User DB init...
 	userDB, err := userds.InitDB()
 	if err != nil {
 		log.Fatal("User DB connection failed:", err)
 	}
-	defer func() {
-		if err := userDB.Close(); err != nil {
-			log.Printf("Error closing User DB: %v", err)
-		}
-	}()
+	defer userDB.Close()
 
 	userStore := userstore.NewUserStore(userDB)
 	userService := userservice.NewUserService(userStore)
 	userHandler := userhandler.NewUserHandler(userService)
 
-	//  TASK
+	// Routes
 	http.HandleFunc("/task", taskHandler.HandleTasks)
-	http.HandleFunc("/task/{id}", taskHandler.HandleTaskByID) // GET by ID
-
-	// USER
+	http.HandleFunc("/task/{id}", taskHandler.HandleTaskByID)
 	http.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
-		case "GET":
+		case http.MethodGet:
 			userHandler.GetAllUsers(w, r)
-		case "POST":
+		case http.MethodPost:
 			userHandler.CreateUser(w, r)
 		default:
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -66,6 +64,8 @@ func main() {
 	})
 	http.HandleFunc("/user/{id}", userHandler.GetUserbyID)
 
-	fmt.Println("Server on :8000")
+	http.Handle("/swagger/", httpSwagger.WrapHandler)
+
+	fmt.Println("Server running at :8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

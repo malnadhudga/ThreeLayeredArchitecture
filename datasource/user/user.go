@@ -8,11 +8,13 @@ import (
 func InitDB() (*sql.DB, error) {
 	dsn := "root:root123@tcp(localhost:3306)/test_db"
 	db, err := sql.Open("mysql", dsn)
+
 	if err != nil {
 		return nil, err
 	}
 	if err = db.Ping(); err != nil {
 		return nil, err
 	}
+
 	return db, nil
 }

@@ -21,7 +21,9 @@ func (ts *TaskStore) Add(description string) (models.Task, error) {
 	if err != nil {
 		return models.Task{}, err
 	}
+
 	id, _ := result.LastInsertId()
+
 	return models.Task{ID: int(id), Description: description, Completed: false}, nil
 }
 
@@ -29,9 +31,15 @@ func (ts *TaskStore) GetPending() ([]models.Task, error) {
 	query := "SELECT id, description, completed FROM task WHERE completed = FALSE ORDER BY id"
 
 	rows, err := ts.DB.Query(query)
+
+	if rows.Err() != nil {
+		return []models.Task{}, rows.Err()
+	}
+
 	if err != nil {
 		return nil, err
 	}
+
 	defer func() {
 		if err := rows.Close(); err != nil {
 			log.Printf("Error closing Task DB: %v", err)
@@ -39,33 +47,41 @@ func (ts *TaskStore) GetPending() ([]models.Task, error) {
 	}()
 
 	var tasks []models.Task
+
 	for rows.Next() {
 		var task models.Task
 		err := rows.Scan(&task.ID, &task.Description, &task.Completed)
+
 		if err != nil {
 			return nil, err
 		}
+
 		tasks = append(tasks, task)
 	}
+
 	return tasks, nil
 }
 
 func (ts *TaskStore) GetByID(id int) (models.Task, error) {
 	query := "SELECT id, description, completed FROM task WHERE id = ?"
 	row := ts.DB.QueryRow(query, id)
+
 	var task models.Task
 	err := row.Scan(&task.ID, &task.Description, &task.Completed)
+
 	return task, err
 }
 
 func (ts *TaskStore) MarkComplete(id int) error {
 	query := "UPDATE task SET completed = TRUE WHERE id = ?"
 	_, err := ts.DB.Exec(query, id)
+
 	return err
 }
 
 func (ts *TaskStore) Delete(id int) error {
 	query := "DELETE FROM task WHERE id = ?"
 	_, err := ts.DB.Exec(query, id)
+
 	return err
 }
