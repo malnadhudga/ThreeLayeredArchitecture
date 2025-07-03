@@ -4,47 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3567980-58dc-4a7e-bb50-8ea63275d715" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.golangci.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handler/task/handlerTask_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handler/user/handlerUser_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/go_workslfows.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/go_workslfows.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c.out" beforeDir="false" afterPath="$PROJECT_DIR$/c.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasource/task/task.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasource/user/user.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/docs/docs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/task/c.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/task/interface.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/task/interface.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/task/mock_interface.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/task/mock_interface.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/task/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/task/task.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/task/taskhandler_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user/c.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user/interface.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user/interface.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user/mock_interface.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user/mock_interface.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user/userhandler_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/c.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/task/c.out" beforeDir="false" afterPath="$PROJECT_DIR$/services/task/c.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/task/interface.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/task/mock_interface.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/task/task.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/task/task_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/task/task_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/user/c.out" beforeDir="false" afterPath="$PROJECT_DIR$/services/user/c.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/user/interface.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/user/mock_interface.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/user/service_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/user/service_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/user/user.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/task/c.out" beforeDir="false" afterPath="$PROJECT_DIR$/store/task/c.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/task/stotetask_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/task/stotetask_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/task/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/task/task.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/user/c.out" beforeDir="false" afterPath="$PROJECT_DIR$/store/user/c.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/user/storeuser_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/user/storeuser_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/user/user.go" afterDir="false" />
-    </list>
+    <list default="true" id="a3567980-58dc-4a7e-bb50-8ea63275d715" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
