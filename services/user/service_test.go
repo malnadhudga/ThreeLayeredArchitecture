@@ -4,13 +4,16 @@ import (
 	model "ThreeLayeredArchitecture/models/user"
 	"errors"
 	"go.uber.org/mock/gomock"
+	"gofr.dev/pkg/gofr"
 	"testing"
 )
+
+var ctx *gofr.Context
 
 func TestUserService_CreateUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 
-	mockStore := NewMockUserStore(ctrl)
+	mockStore := NewMockStore(ctrl)
 	service := NewUserService(mockStore)
 
 	testCases := []struct {
@@ -37,8 +40,8 @@ func TestUserService_CreateUser(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		mockStore.EXPECT().CreateUser(tc.input).Return(tc.expected, tc.mockErr)
-		result, err := service.CreateUser(tc.input)
+		mockStore.EXPECT().CreateUser(ctx, tc.input).Return(tc.expected, tc.mockErr)
+		result, err := service.CreateUser(ctx, tc.input)
 
 		if (err == nil && tc.mockErr != nil) || (err != nil && tc.mockErr == nil) {
 			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.mockErr, err)
@@ -52,7 +55,7 @@ func TestUserService_CreateUser(t *testing.T) {
 
 func TestUserService_GetAllUsers(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	mockStore := NewMockUserStore(ctrl)
+	mockStore := NewMockStore(ctrl)
 	service := NewUserService(mockStore)
 
 	expectedUsers := []model.User{
@@ -60,8 +63,8 @@ func TestUserService_GetAllUsers(t *testing.T) {
 		{ID: 2, Name: "Bhim"},
 	}
 
-	mockStore.EXPECT().GetAllUsers().Return(expectedUsers, nil)
-	users, err := service.GetAllUsers()
+	mockStore.EXPECT().GetAllUsers(ctx).Return(expectedUsers, nil)
+	users, err := service.GetAllUsers(ctx)
 
 	if err != nil {
 		t.Errorf("[Success case] unexpected error: %v", err)
@@ -78,9 +81,9 @@ func TestUserService_GetAllUsers(t *testing.T) {
 	}
 
 	mockErr := errors.New("database error")
-	mockStore.EXPECT().GetAllUsers().Return(nil, mockErr)
+	mockStore.EXPECT().GetAllUsers(ctx).Return(nil, mockErr)
 
-	usersFail, errFail := service.GetAllUsers()
+	usersFail, errFail := service.GetAllUsers(ctx)
 	if errFail == nil || errFail.Error() != mockErr.Error() {
 		t.Errorf("[Failure case] expected error %v, got %v", mockErr, errFail)
 	}
@@ -94,7 +97,7 @@ func TestUserService_GetUserByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockStore := NewMockUserStore(ctrl)
+	mockStore := NewMockStore(ctrl)
 	service := NewUserService(mockStore)
 
 	testCases := []struct {
@@ -121,10 +124,12 @@ func TestUserService_GetUserByID(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		mockStore.EXPECT().GetUserByID(tc.inputID).Return(tc.expected, tc.mockErr)
-		result, err := service.GetUserByID(tc.inputID)
+		mockStore.EXPECT().GetUserByID(ctx, tc.inputID).Return(tc.expected, tc.mockErr)
+		result, err := service.GetUserByID(ctx, tc.inputID)
 
-		if (err == nil && tc.mockErr != nil) || (err != nil && tc.mockErr == nil) || (err != nil && tc.mockErr != nil && err.Error() != tc.mockErr.Error()) {
+		if (err == nil && tc.mockErr != nil) ||
+			(err != nil && tc.mockErr == nil) ||
+			(err != nil && tc.mockErr != nil && err.Error() != tc.mockErr.Error()) {
 			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.mockErr, err)
 		}
 

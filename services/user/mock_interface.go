@@ -10,77 +10,78 @@
 package user
 
 import (
-	user "ThreeLayeredArchitecture/models/user"
+	models "ThreeLayeredArchitecture/models/user"
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
+	gofr "gofr.dev/pkg/gofr"
 )
 
-// MockUserStore is a mock of UserStore interface.
-type MockUserStore struct {
+// MockStore is a mock of Store interface.
+type MockStore struct {
 	ctrl     *gomock.Controller
-	recorder *MockUserStoreMockRecorder
+	recorder *MockStoreMockRecorder
 	isgomock struct{}
 }
 
-// MockUserStoreMockRecorder is the mock recorder for MockUserStore.
-type MockUserStoreMockRecorder struct {
-	mock *MockUserStore
+// MockStoreMockRecorder is the mock recorder for MockStore.
+type MockStoreMockRecorder struct {
+	mock *MockStore
 }
 
-// NewMockUserStore creates a new mock instance.
-func NewMockUserStore(ctrl *gomock.Controller) *MockUserStore {
-	mock := &MockUserStore{ctrl: ctrl}
-	mock.recorder = &MockUserStoreMockRecorder{mock}
+// NewMockStore creates a new mock instance.
+func NewMockStore(ctrl *gomock.Controller) *MockStore {
+	mock := &MockStore{ctrl: ctrl}
+	mock.recorder = &MockStoreMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUserStore) EXPECT() *MockUserStoreMockRecorder {
+func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 	return m.recorder
 }
 
 // CreateUser mocks base method.
-func (m *MockUserStore) CreateUser(arg0 user.User) (user.User, error) {
+func (m *MockStore) CreateUser(ctx *gofr.Context, user models.User) (models.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateUser", arg0)
-	ret0, _ := ret[0].(user.User)
+	ret := m.ctrl.Call(m, "CreateUser", ctx, user)
+	ret0, _ := ret[0].(models.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateUser indicates an expected call of CreateUser.
-func (mr *MockUserStoreMockRecorder) CreateUser(arg0 any) *gomock.Call {
+func (mr *MockStoreMockRecorder) CreateUser(ctx, user any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserStore)(nil).CreateUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockStore)(nil).CreateUser), ctx, user)
 }
 
 // GetAllUsers mocks base method.
-func (m *MockUserStore) GetAllUsers() ([]user.User, error) {
+func (m *MockStore) GetAllUsers(ctx *gofr.Context) ([]models.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllUsers")
-	ret0, _ := ret[0].([]user.User)
+	ret := m.ctrl.Call(m, "GetAllUsers", ctx)
+	ret0, _ := ret[0].([]models.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetAllUsers indicates an expected call of GetAllUsers.
-func (mr *MockUserStoreMockRecorder) GetAllUsers() *gomock.Call {
+func (mr *MockStoreMockRecorder) GetAllUsers(ctx any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockUserStore)(nil).GetAllUsers))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockStore)(nil).GetAllUsers), ctx)
 }
 
 // GetUserByID mocks base method.
-func (m *MockUserStore) GetUserByID(arg0 int) (user.User, error) {
+func (m *MockStore) GetUserByID(ctx *gofr.Context, id int) (models.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByID", arg0)
-	ret0, _ := ret[0].(user.User)
+	ret := m.ctrl.Call(m, "GetUserByID", ctx, id)
+	ret0, _ := ret[0].(models.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetUserByID indicates an expected call of GetUserByID.
-func (mr *MockUserStoreMockRecorder) GetUserByID(arg0 any) *gomock.Call {
+func (mr *MockStoreMockRecorder) GetUserByID(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockUserStore)(nil).GetUserByID), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockStore)(nil).GetUserByID), ctx, id)
 }

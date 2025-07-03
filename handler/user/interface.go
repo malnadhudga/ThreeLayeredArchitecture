@@ -1,9 +1,12 @@
 package user
 
-import models "ThreeLayeredArchitecture/models/user"
+import (
+	models "ThreeLayeredArchitecture/models/user"
+	"gofr.dev/pkg/gofr"
+)
 
 type UserService interface {
-	CreateUser(models.User) (models.User, error)
-	GetAllUsers() ([]models.User, error)
-	GetUserByID(int) (models.User, error)
+	CreateUser(*gofr.Context, models.User) (models.User, error)
+	GetAllUsers(*gofr.Context) ([]models.User, error)
+	GetUserByID(*gofr.Context, int) (models.User, error)
 }

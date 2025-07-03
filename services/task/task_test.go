@@ -4,8 +4,11 @@ import (
 	model "ThreeLayeredArchitecture/models/task"
 	"errors"
 	"go.uber.org/mock/gomock"
+	"gofr.dev/pkg/gofr"
 	"testing"
 )
+
+var ctx *gofr.Context
 
 func TestTaskService_Add(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -15,29 +18,33 @@ func TestTaskService_Add(t *testing.T) {
 	testCases := []struct {
 		id       int
 		desc     string
-		input    string
+		input    model.Task
 		expected model.Task
 		mockErr  error
 	}{
 		{
-			id:       1,
-			desc:     "Success adding task",
-			input:    "Write test cases",
+			id:   1,
+			desc: "Success adding task",
+			input: model.Task{
+				Description: "Write test cases",
+			},
 			expected: model.Task{ID: 1, Description: "Write test cases"},
 			mockErr:  nil,
 		},
 		{
-			id:       2,
-			desc:     "Failure adding task",
-			input:    "Failing task",
+			id:   2,
+			desc: "Failure adding task",
+			input: model.Task{
+				Description: "Write test cases",
+			},
 			expected: model.Task{},
 			mockErr:  errors.New("failed to add task"),
 		},
 	}
 
 	for _, tc := range testCases {
-		mockStore.EXPECT().Add(tc.input).Return(tc.expected, tc.mockErr)
-		result, err := service.Add(tc.input)
+		mockStore.EXPECT().Add(ctx, tc.input).Return(tc.expected, tc.mockErr)
+		result, err := service.Add(ctx, tc.input)
 
 		if (err == nil && tc.mockErr != nil) || (err != nil && tc.mockErr == nil) {
 			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.mockErr, err)
@@ -59,8 +66,8 @@ func TestTaskService_GetPending(t *testing.T) {
 		{ID: 2, Description: "Task 2", Completed: false},
 	}
 
-	mockStore.EXPECT().GetPending().Return(expected, nil)
-	result, err := service.GetPending()
+	mockStore.EXPECT().GetPending(ctx).Return(expected, nil)
+	result, err := service.GetPending(ctx)
 
 	if err != nil {
 		t.Errorf("[Success case] unexpected error: %v", err)
@@ -73,9 +80,9 @@ func TestTaskService_GetPending(t *testing.T) {
 	}
 
 	mockErr := errors.New("fetch failed")
-	mockStore.EXPECT().GetPending().Return(nil, mockErr)
+	mockStore.EXPECT().GetPending(ctx).Return(nil, mockErr)
 
-	resultFail, errFail := service.GetPending()
+	resultFail, errFail := service.GetPending(ctx)
 	if errFail == nil || errFail.Error() != mockErr.Error() {
 		t.Errorf("[Failure case] expected error %v, got %v", mockErr, errFail)
 	}
@@ -116,10 +123,13 @@ func TestTaskService_GetByID(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		mockStore.EXPECT().GetByID(tc.inputID).Return(tc.expected, tc.mockErr)
-		result, err := service.GetByID(tc.inputID)
+		mockStore.EXPECT().GetByID(ctx, tc.inputID).Return(tc.expected, tc.mockErr)
+		result, err := service.GetByID(ctx, tc.inputID)
 
-		if (err == nil && tc.mockErr != nil) || (err != nil && tc.mockErr == nil) || (err != nil && tc.mockErr != nil && err.Error() != tc.mockErr.Error()) {
+		if (err == nil && tc.mockErr != nil) ||
+			(err != nil && tc.mockErr == nil) ||
+			(err != nil && tc.mockErr != nil &&
+				err.Error() != tc.mockErr.Error()) {
 			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.mockErr, err)
 		}
 
@@ -183,16 +193,16 @@ func TestTaskService_MarkComplete(t *testing.T) {
 
 	for _, tc := range testCases {
 		if tc.desc == "GetByID error" {
-			mockStore.EXPECT().GetByID(tc.taskID).Return(tc.initialTask, tc.mockErr)
+			mockStore.EXPECT().GetByID(ctx, tc.taskID).Return(tc.initialTask, tc.mockErr)
 		} else {
-			mockStore.EXPECT().GetByID(tc.taskID).Return(tc.initialTask, nil)
+			mockStore.EXPECT().GetByID(ctx, tc.taskID).Return(tc.initialTask, nil)
 
 			if !tc.initialTask.Completed {
-				mockStore.EXPECT().MarkComplete(tc.taskID).Return(tc.mockErr)
+				mockStore.EXPECT().MarkComplete(ctx, tc.taskID).Return(tc.mockErr)
 			}
 		}
 
-		msg, err := service.MarkComplete(tc.taskID)
+		msg, err := service.MarkComplete(ctx, tc.taskID)
 
 		if (err == nil && tc.expectErr != nil) || (err != nil && tc.expectErr == nil) {
 			t.Errorf("[Test ID %d] %s: expected error %v, got %v", tc.id, tc.desc, tc.expectErr, err)
@@ -206,19 +216,35 @@ func TestTaskService_MarkComplete(t *testing.T) {
 
 func TestTaskService_Delete(t *testing.T) {
 	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
 	mockStore := NewMockTaskStore(ctrl)
 	service := NewTaskService(mockStore)
 
-	mockStore.EXPECT().Delete(1).Return(nil)
-	err := service.Delete(1)
+	// Set expectation for GetByID before Delete for id=1
+	mockStore.EXPECT().GetByID(ctx, 1).Return(model.Task{}, nil)
+	mockStore.EXPECT().Delete(ctx, 1).Return(nil)
+
+	_, err := service.Delete(ctx, 1)
 	if err != nil {
 		t.Errorf("expected no error, got %v", err)
 	}
 
-	mockErr := errors.New("delete failed")
-	mockStore.EXPECT().Delete(2).Return(mockErr)
-	err = service.Delete(2)
+	mockErr := errors.New("No task Found")
+
+	mockStore.EXPECT().GetByID(ctx, 2).Return(model.Task{}, nil)
+	mockStore.EXPECT().Delete(ctx, 2).Return(mockErr)
+
+	_, err = service.Delete(ctx, 2)
 	if err == nil || err.Error() != mockErr.Error() {
 		t.Errorf("expected error %v, got %v", mockErr, err)
+	}
+
+	mockGetErr := errors.New("task not found")
+	mockStore.EXPECT().GetByID(ctx, 3).Return(model.Task{}, mockGetErr)
+
+	msg, err := service.Delete(ctx, 3)
+	if err == nil || err.Error() != mockGetErr.Error() || msg != "No task Found" {
+		t.Errorf("expected getByID error, got msg: %v, err: %v", msg, err)
 	}
 }

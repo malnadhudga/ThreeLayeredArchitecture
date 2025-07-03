@@ -14,6 +14,7 @@ import (
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
+	gofr "gofr.dev/pkg/gofr"
 )
 
 // MockTaskservice is a mock of Taskservice interface.
@@ -41,75 +42,76 @@ func (m *MockTaskservice) EXPECT() *MockTaskserviceMockRecorder {
 }
 
 // Add mocks base method.
-func (m *MockTaskservice) Add(desc string) (models.Task, error) {
+func (m *MockTaskservice) Add(ctx *gofr.Context, input models.Task) (models.Task, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Add", desc)
+	ret := m.ctrl.Call(m, "Add", ctx, input)
 	ret0, _ := ret[0].(models.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Add indicates an expected call of Add.
-func (mr *MockTaskserviceMockRecorder) Add(desc any) *gomock.Call {
+func (mr *MockTaskserviceMockRecorder) Add(ctx, input any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTaskservice)(nil).Add), desc)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockTaskservice)(nil).Add), ctx, input)
 }
 
 // Delete mocks base method.
-func (m *MockTaskservice) Delete(id int) error {
+func (m *MockTaskservice) Delete(ctx *gofr.Context, id int) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", id)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockTaskserviceMockRecorder) Delete(id any) *gomock.Call {
+func (mr *MockTaskserviceMockRecorder) Delete(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockTaskservice)(nil).Delete), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockTaskservice)(nil).Delete), ctx, id)
 }
 
 // GetByID mocks base method.
-func (m *MockTaskservice) GetByID(id int) (models.Task, error) {
+func (m *MockTaskservice) GetByID(ctx *gofr.Context, id int) (models.Task, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByID", id)
+	ret := m.ctrl.Call(m, "GetByID", ctx, id)
 	ret0, _ := ret[0].(models.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetByID indicates an expected call of GetByID.
-func (mr *MockTaskserviceMockRecorder) GetByID(id any) *gomock.Call {
+func (mr *MockTaskserviceMockRecorder) GetByID(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByID", reflect.TypeOf((*MockTaskservice)(nil).GetByID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByID", reflect.TypeOf((*MockTaskservice)(nil).GetByID), ctx, id)
 }
 
 // GetPending mocks base method.
-func (m *MockTaskservice) GetPending() ([]models.Task, error) {
+func (m *MockTaskservice) GetPending(ctx *gofr.Context) ([]models.Task, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPending")
+	ret := m.ctrl.Call(m, "GetPending", ctx)
 	ret0, _ := ret[0].([]models.Task)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPending indicates an expected call of GetPending.
-func (mr *MockTaskserviceMockRecorder) GetPending() *gomock.Call {
+func (mr *MockTaskserviceMockRecorder) GetPending(ctx any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPending", reflect.TypeOf((*MockTaskservice)(nil).GetPending))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPending", reflect.TypeOf((*MockTaskservice)(nil).GetPending), ctx)
 }
 
 // MarkComplete mocks base method.
-func (m *MockTaskservice) MarkComplete(id int) (string, error) {
+func (m *MockTaskservice) MarkComplete(ctx *gofr.Context, id int) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MarkComplete", id)
+	ret := m.ctrl.Call(m, "MarkComplete", ctx, id)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // MarkComplete indicates an expected call of MarkComplete.
-func (mr *MockTaskserviceMockRecorder) MarkComplete(id any) *gomock.Call {
+func (mr *MockTaskserviceMockRecorder) MarkComplete(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkComplete", reflect.TypeOf((*MockTaskservice)(nil).MarkComplete), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkComplete", reflect.TypeOf((*MockTaskservice)(nil).MarkComplete), ctx, id)
 }

@@ -2,49 +2,42 @@ package taskstore
 
 import (
 	"ThreeLayeredArchitecture/models/task"
-	"database/sql"
-	"log"
+	"gofr.dev/pkg/gofr"
 )
 
-type TaskStore struct {
-	DB *sql.DB
+type TaskStore struct{}
+
+func NewTaskStore() *TaskStore {
+	return &TaskStore{}
 }
 
-func NewTaskStore(db *sql.DB) *TaskStore {
-	return &TaskStore{DB: db}
-}
-
-func (ts *TaskStore) Add(description string) (models.Task, error) {
-	query := "INSERT INTO task (description, completed) VALUES (?, ?)"
-
-	result, err := ts.DB.Exec(query, description, false)
+func (*TaskStore) Add(ctx *gofr.Context, input models.Task) (models.Task, error) {
+	res, err := ctx.SQL.Exec("INSERT INTO task (description, completed) VALUES (?, ?)", input.Description, input.Completed)
 	if err != nil {
 		return models.Task{}, err
 	}
 
-	id, _ := result.LastInsertId()
+	id, err := res.LastInsertId()
+	if err != nil {
+		return models.Task{}, err
+	}
 
-	return models.Task{ID: int(id), Description: description, Completed: false}, nil
+	input.ID = int(id)
+
+	return input, nil
 }
 
-func (ts *TaskStore) GetPending() ([]models.Task, error) {
+func (*TaskStore) GetPending(ctx *gofr.Context) ([]models.Task, error) {
 	query := "SELECT id, description, completed FROM task WHERE completed = FALSE ORDER BY id"
-
-	rows, err := ts.DB.Query(query)
-
-	if rows.Err() != nil {
-		return []models.Task{}, rows.Err()
-	}
+	rows, err := ctx.SQL.Query(query)
 
 	if err != nil {
 		return nil, err
 	}
 
-	defer func() {
-		if err := rows.Close(); err != nil {
-			log.Printf("Error closing Task DB: %v", err)
-		}
-	}()
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
 
 	var tasks []models.Task
 
@@ -62,9 +55,9 @@ func (ts *TaskStore) GetPending() ([]models.Task, error) {
 	return tasks, nil
 }
 
-func (ts *TaskStore) GetByID(id int) (models.Task, error) {
+func (*TaskStore) GetByID(ctx *gofr.Context, id int) (models.Task, error) {
 	query := "SELECT id, description, completed FROM task WHERE id = ?"
-	row := ts.DB.QueryRow(query, id)
+	row := ctx.SQL.QueryRow(query, id)
 
 	var task models.Task
 	err := row.Scan(&task.ID, &task.Description, &task.Completed)
@@ -72,16 +65,16 @@ func (ts *TaskStore) GetByID(id int) (models.Task, error) {
 	return task, err
 }
 
-func (ts *TaskStore) MarkComplete(id int) error {
+func (*TaskStore) MarkComplete(ctx *gofr.Context, id int) error {
 	query := "UPDATE task SET completed = TRUE WHERE id = ?"
-	_, err := ts.DB.Exec(query, id)
+	_, err := ctx.SQL.Exec(query, id)
 
 	return err
 }
 
-func (ts *TaskStore) Delete(id int) error {
+func (*TaskStore) Delete(ctx *gofr.Context, id int) error {
 	query := "DELETE FROM task WHERE id = ?"
-	_, err := ts.DB.Exec(query, id)
+	_, err := ctx.SQL.Exec(query, id)
 
 	return err
 }

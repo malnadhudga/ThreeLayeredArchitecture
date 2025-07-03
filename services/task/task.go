@@ -2,6 +2,7 @@ package task
 
 import (
 	"ThreeLayeredArchitecture/models/task"
+	"gofr.dev/pkg/gofr"
 )
 
 type TaskService struct {
@@ -12,20 +13,20 @@ func NewTaskService(store TaskStore) *TaskService {
 	return &TaskService{Store: store}
 }
 
-func (s *TaskService) Add(desc string) (models.Task, error) {
-	return s.Store.Add(desc)
+func (s *TaskService) Add(ctx *gofr.Context, input models.Task) (models.Task, error) {
+	return s.Store.Add(ctx, input)
 }
 
-func (s *TaskService) GetPending() ([]models.Task, error) {
-	return s.Store.GetPending()
+func (s *TaskService) GetPending(ctx *gofr.Context) ([]models.Task, error) {
+	return s.Store.GetPending(ctx)
 }
 
-func (s *TaskService) GetByID(id int) (models.Task, error) {
-	return s.Store.GetByID(id)
+func (s *TaskService) GetByID(ctx *gofr.Context, id int) (models.Task, error) {
+	return s.Store.GetByID(ctx, id)
 }
 
-func (s *TaskService) MarkComplete(id int) (string, error) {
-	task, err := s.Store.GetByID(id)
+func (s *TaskService) MarkComplete(ctx *gofr.Context, id int) (string, error) {
+	task, err := s.Store.GetByID(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -34,7 +35,7 @@ func (s *TaskService) MarkComplete(id int) (string, error) {
 		return "Task already completed", nil
 	}
 
-	err = s.Store.MarkComplete(id)
+	err = s.Store.MarkComplete(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -42,6 +43,17 @@ func (s *TaskService) MarkComplete(id int) (string, error) {
 	return "Task marked as complete", nil
 }
 
-func (s *TaskService) Delete(id int) error {
-	return s.Store.Delete(id)
+func (s *TaskService) Delete(ctx *gofr.Context, id int) (string, error) {
+	_, err := s.Store.GetByID(ctx, id)
+	if err != nil {
+		return "No task Found", err
+	}
+
+	err = s.Store.Delete(ctx, id)
+
+	if err != nil {
+		return "No task Found", err
+	}
+
+	return "Task is Successfully Deleted", nil
 }

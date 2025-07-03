@@ -1,11 +1,14 @@
 package task
 
-import models "ThreeLayeredArchitecture/models/task"
+import (
+	models "ThreeLayeredArchitecture/models/task"
+	"gofr.dev/pkg/gofr"
+)
 
 type TaskStore interface {
-	Add(desc string) (models.Task, error)
-	GetPending() ([]models.Task, error)
-	GetByID(id int) (models.Task, error)
-	Delete(id int) error
-	MarkComplete(id int) error
+	Add(ctx *gofr.Context, input models.Task) (models.Task, error)
+	GetPending(ctx *gofr.Context) ([]models.Task, error)
+	GetByID(ctx *gofr.Context, id int) (models.Task, error)
+	Delete(ctx *gofr.Context, id int) error
+	MarkComplete(ctx *gofr.Context, id int) error
 }

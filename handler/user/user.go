@@ -1,9 +1,8 @@
 package user
 
 import (
-	"encoding/json"
-	"io"
-	"net/http"
+	"gofr.dev/pkg/gofr"
+	"gofr.dev/pkg/gofr/http/response"
 	"strconv"
 
 	"ThreeLayeredArchitecture/models/user"
@@ -28,37 +27,20 @@ func NewUserHandler(service UserService) *UserHandler {
 // @Failure      400 {string} string "Invalid input"
 // @Failure      500 {string} string "Internal Server Error"
 // @Router       /users [post]
-func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) CreateUser(ctx *gofr.Context) (any, error) {
 	var user models.User
-	body, err := io.ReadAll(r.Body)
+
+	err := ctx.Bind(&user)
 	if err != nil {
-		http.Error(w, "Unable to read body", http.StatusBadRequest)
-		return
+		return nil, err
 	}
 
-	err = json.Unmarshal(body, &user)
+	newUser, err := h.Service.CreateUser(ctx, user)
 	if err != nil {
-		http.Error(w, "Invalid JSON", http.StatusBadRequest)
-		return
+		return nil, err
 	}
 
-	newUser, err := h.Service.CreateUser(user)
-	if err != nil {
-		http.Error(w, "Failed to create user", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	data, err := json.Marshal(newUser)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-	}
-
-	_, err = w.Write(data)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	return response.Raw{Data: newUser}, nil
 }
 
 // GetAllUsers godoc
@@ -70,24 +52,13 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 // @Success      200 {array} models.User
 // @Failure      500 {string} string "Internal Server Error"
 // @Router       /users [get]
-func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := h.Service.GetAllUsers()
+func (h *UserHandler) GetAllUsers(ctx *gofr.Context) (any, error) {
+	users, err := h.Service.GetAllUsers(ctx)
 	if err != nil {
-		http.Error(w, "Failed to get users", http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	data, err := json.Marshal(users)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-	}
-
-	_, err = w.Write(data)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	return response.Raw{Data: users}, nil
 }
 
 // GetUserByID godoc
@@ -101,29 +72,17 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 // @Failure      400 {string} string "Invalid ID"
 // @Failure      404 {string} string "User not found"
 // @Router       /users/{id} [get]
-func (h *UserHandler) GetUserbyID(w http.ResponseWriter, r *http.Request) {
-	idStr := r.PathValue("id")
-	id, err := strconv.Atoi(idStr)
+func (h *UserHandler) GetUserbyID(ctx *gofr.Context) (any, error) {
+	//idStr := r.PathValue("id")
+	id, err := strconv.Atoi(ctx.PathParam("id"))
 	if err != nil {
-		http.Error(w, "Invalid ID format", http.StatusBadRequest)
-		return
+		return nil, err
 	}
 
-	user, err := h.Service.GetUserByID(id)
+	user, err := h.Service.GetUserByID(ctx, id)
 	if err != nil {
-		http.Error(w, "User not found", http.StatusNotFound)
-		return
+		return nil, err
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	data, err := json.Marshal(user)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-	}
-
-	_, err = w.Write(data)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	return response.Raw{Data: user}, nil
 }
