@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a3567980-58dc-4a7e-bb50-8ea63275d715" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deployment_chart/templates/pdb.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysql_chart/templates/configmap.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs/.env" beforeDir="false" afterPath="$PROJECT_DIR$/configs/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20250703103710_create_user_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20250703103710_create_user_table.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20250703103720_create_task_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20250703103720_create_task_table.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/store/task/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/task/task.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file:///usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GoLinterSelectedExecutable" path="$USER_HOME$/go/bin/golangci-lint" />
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2zGkHdZ7awKQ1BdlkmWdU1NgSzD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Test.TestAdd in ThreeLayeredArchitecture/store/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestAddUser in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateTask in ThreeLayeredArchitecture/handler/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateUser in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateUser in ThreeLayeredArchitecture/store/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestDelete in ThreeLayeredArchitecture/store/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestDeleteTask in ThreeLayeredArchitecture/handler/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetAllTasks in ThreeLayeredArchitecture/handler/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetAllUser in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetAllUsers in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetAllUsers in ThreeLayeredArchitecture/store/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetByID in ThreeLayeredArchitecture/store/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetPending in ThreeLayeredArchitecture/store/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetUserByID in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetUserByID in ThreeLayeredArchitecture/store/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetUserbyID in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestHandleTaskByID in ThreeLayeredArchitecture/handler/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestMarkComplete in ThreeLayeredArchitecture/store/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestMarkTaskComplete in ThreeLayeredArchitecture/handler/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestTaskService_Add in ThreeLayeredArchitecture/services/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestTaskService_Delete in ThreeLayeredArchitecture/services/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestTaskService_GetByID in ThreeLayeredArchitecture/services/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestTaskService_GetPending in ThreeLayeredArchitecture/services/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestTaskService_MarkComplete in ThreeLayeredArchitecture/services/task.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestUserHandler_CreateUser in ThreeLayeredArchitecture/handler/user.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestUserService_GetUserByID in ThreeLayeredArchitecture/services/user.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginOnboarding&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;gofr&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/zopdev/GolandProjects/ThreeLayeredArchitecture&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/mysql_chart/templates" />
+      <recent name="$PROJECT_DIR$/mysql_chart" />
+      <recent name="$PROJECT_DIR$/my-chart/templates" />
+      <recent name="$PROJECT_DIR$/my-chart" />
+      <recent name="$PROJECT_DIR$/deployment/mysql" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Test.TestUserService_GetUserByID in ThreeLayeredArchitecture/services/user">
+    <configuration name="TestCreateUser in ThreeLayeredArchitecture/store/user" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ThreeLayeredArchitecture" />
+      <working_directory value="$PROJECT_DIR$/store/user" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="ThreeLayeredArchitecture/store/user" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestCreateUser\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestGetAllUsers in ThreeLayeredArchitecture/store/user" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ThreeLayeredArchitecture" />
+      <working_directory value="$PROJECT_DIR$/store/user" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="ThreeLayeredArchitecture/store/user" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestGetAllUsers\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestGetPending in ThreeLayeredArchitecture/store/task" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ThreeLayeredArchitecture" />
+      <working_directory value="$PROJECT_DIR$/store/task" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="ThreeLayeredArchitecture/store/task" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestGetPending\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestGetUserByID in ThreeLayeredArchitecture/store/user" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ThreeLayeredArchitecture" />
+      <working_directory value="$PROJECT_DIR$/store/user" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="ThreeLayeredArchitecture/store/user" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestGetUserByID\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestUserService_GetUserByID in ThreeLayeredArchitecture/services/user" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="ThreeLayeredArchitecture" />
+      <working_directory value="$PROJECT_DIR$/services/user" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="ThreeLayeredArchitecture/services/user" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestUserService_GetUserByID\E$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestUserService_GetUserByID in ThreeLayeredArchitecture/services/user" />
+        <item itemvalue="Go Test.TestGetPending in ThreeLayeredArchitecture/store/task" />
+        <item itemvalue="Go Test.TestGetUserByID in ThreeLayeredArchitecture/store/user" />
+        <item itemvalue="Go Test.TestGetAllUsers in ThreeLayeredArchitecture/store/user" />
+        <item itemvalue="Go Test.TestCreateUser in ThreeLayeredArchitecture/store/user" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-3b128438d3f6-4b567d62c776-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-251.26094.127" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-GO-251.26094.127" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a3567980-58dc-4a7e-bb50-8ea63275d715" name="Changes" comment="" />
+      <created>1751364710296</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751364710296</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>
