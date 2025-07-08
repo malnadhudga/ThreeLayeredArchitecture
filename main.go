@@ -3,6 +3,7 @@ package main
 import (
 	_ "ThreeLayeredArchitecture/docs"
 	taskhandler "ThreeLayeredArchitecture/handler/task"
+	"ThreeLayeredArchitecture/migrations"
 	taskservice "ThreeLayeredArchitecture/services/task"
 	taskstore "ThreeLayeredArchitecture/store/task"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -24,19 +25,13 @@ import (
 func main() {
 	app := gofr.New()
 
+	// Run DB migrations
+	app.Migrate(migrations.All())
+
+	// Setup Task routes
 	taskStore := taskstore.NewTaskStore()
 	taskService := taskservice.NewTaskService(taskStore)
 	taskHandler := taskhandler.NewTaskHandler(taskService)
-
-	//userDB, err := userds.InitDB()
-	//if err != nil {
-	//	log.Fatal("User DB connection failed:", err)
-	//}
-	//defer userDB.Close()
-
-	userStore := userstore.NewUserStore()
-	userService := userservice.NewUserService(userStore)
-	userHandler := userhandler.NewUserHandler(userService)
 
 	app.GET("/task", taskHandler.GetAllTasks)
 	app.POST("/task", taskHandler.CreateTask)
@@ -44,14 +39,21 @@ func main() {
 	app.PATCH("/task", taskHandler.MarkTaskComplete)
 	app.GET("/task/{id}", taskHandler.HandleTaskByID)
 
+	// Setup User routes
+	userStore := userstore.NewUserStore()
+	userService := userservice.NewUserService(userStore)
+	userHandler := userhandler.NewUserHandler(userService)
+
 	app.GET("/user", userHandler.GetAllUsers)
 	app.POST("/user", userHandler.CreateUser)
 	app.GET("/user/{id}", userHandler.GetUserbyID)
 
+	// Start a separate HTTP server for Swagger docs
+	go func() {
+		http.Handle("/swagger/", httpSwagger.WrapHandler)
+		log.Println("Swagger docs available at http://localhost:8001/swagger/index.html")
+		log.Fatal(http.ListenAndServe(":8001", nil))
+	}()
+
 	app.Run()
-
-	// Swagger
-	http.Handle("/swagger/", httpSwagger.WrapHandler)
-
-	log.Fatal(http.ListenAndServe(":8000", nil))
 }

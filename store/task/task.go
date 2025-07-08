@@ -2,6 +2,7 @@ package taskstore
 
 import (
 	"ThreeLayeredArchitecture/models/task"
+	"fmt"
 	"gofr.dev/pkg/gofr"
 )
 
@@ -14,7 +15,7 @@ func NewTaskStore() *TaskStore {
 func (*TaskStore) Add(ctx *gofr.Context, input models.Task) (models.Task, error) {
 	res, err := ctx.SQL.Exec("INSERT INTO task (description, completed) VALUES (?, ?)", input.Description, input.Completed)
 	if err != nil {
-		return models.Task{}, err
+		return models.Task{}, fmt.Errorf("failed to add task: %w", err)
 	}
 
 	id, err := res.LastInsertId()

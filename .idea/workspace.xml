@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3567980-58dc-4a7e-bb50-8ea63275d715" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deployment_chart/templates/pdb.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysql_chart/templates/configmap.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs/.env" beforeDir="false" afterPath="$PROJECT_DIR$/configs/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20250703103710_create_user_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20250703103710_create_user_table.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20250703103720_create_task_table.go" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20250703103720_create_task_table.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/store/task/task.go" beforeDir="false" afterPath="$PROJECT_DIR$/store/task/task.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +34,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GoLinterSelectedExecutable" path="$USER_HOME$/go/bin/golangci-lint" />
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -81,7 +95,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/mysql_chart/templates" />
+      <recent name="$PROJECT_DIR$/mysql_chart" />
+      <recent name="$PROJECT_DIR$/my-chart/templates" />
+      <recent name="$PROJECT_DIR$/my-chart" />
+      <recent name="$PROJECT_DIR$/deployment/mysql" />
     </key>
   </component>
   <component name="RunManager" selected="Go Test.TestUserService_GetUserByID in ThreeLayeredArchitecture/services/user">
